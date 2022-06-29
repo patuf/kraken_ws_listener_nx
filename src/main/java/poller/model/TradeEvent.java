@@ -1,5 +1,6 @@
 package poller.model;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 /**
@@ -8,11 +9,12 @@ import java.time.LocalDateTime;
  * Extending classes can augment with additional fields
  */
 public class TradeEvent {
+    private static DecimalFormat df = new DecimalFormat("##.########");
     private double price;
-    private String amount;
+    private double amount;
     private LocalDateTime ts;
 
-    public TradeEvent(double price, String amount, LocalDateTime ts) {
+    public TradeEvent(double price, double amount, LocalDateTime ts) {
         this.price = price;
         this.amount = amount;
         this.ts = ts;
@@ -22,7 +24,7 @@ public class TradeEvent {
         return price;
     }
 
-    public String getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -33,9 +35,9 @@ public class TradeEvent {
     @Override
     public String toString() {
         return new StringBuilder("[")
-                .append(getPrice())
+                .append(df.format(getPrice()))
                 .append(", ")
-                .append(getAmount())
+                .append(df.format(getAmount()))
                 .append("]")
                 .toString();
     }

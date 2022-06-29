@@ -73,7 +73,7 @@ public class SnapshotOperator {
         for (JsonElement el: operations) {
             JsonArray operation = el.getAsJsonArray();
             double price = operation.get(0).getAsDouble();
-            String amount = operation.get(1).getAsString();
+            double amount = operation.get(1).getAsDouble();
             String timestampSt = operation.get(2).getAsString();
             int delimIdx = timestampSt.indexOf('.');
             LocalDateTime ts = LocalDateTime.ofEpochSecond(

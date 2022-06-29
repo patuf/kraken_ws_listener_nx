@@ -49,7 +49,8 @@ public class TestMapping {
         assertEquals(10, snapshotEthUsd.getBids().size());
         assertEquals(10, snapshotBtcUsd.getAsks().size());
         assertEquals(10, snapshotBtcUsd.getBids().size());
-        assertEquals("7.08636554", snapshotEthUsd.getBids().get(1144.03).getAmount());
+        assertEquals(7.08636554D, snapshotEthUsd.getBids().get(1144.03).getAmount());
+        snapshotOperator.dumpAllSnapshots(System.out);
     }
 
     @Test
@@ -58,7 +59,7 @@ public class TestMapping {
         String testJsonStr = "[560,{\"b\":[[\"1144.03000\",\"37.67105113\",\"1656458264.629331\"]],\"c\":\"89931786\"},\"book-10\",\"ETH/USD\"]";
         snapshotOperator.processTradeMessage(testJsonStr);
 
-        assertEquals("37.67105113", snapshotEthUsd.getBids().get(1144.03).getAmount());
+        assertEquals(37.67105113D, snapshotEthUsd.getBids().get(1144.03).getAmount());
         assertEquals(LocalDateTime.ofEpochSecond(1656458264L, 629331, ZoneOffset.UTC), snapshotEthUsd.getLatestTimestamp());
 
         snapshotOperator.dumpAllSnapshots(System.out); // Just for info
@@ -82,7 +83,7 @@ public class TestMapping {
 
         snapshotOperator.processTradeMessage(testJsonStr);
 
-        assertFalse(snapshotEthUsd.getBids().containsKey(1144.04));
+        assertFalse(snapshotEthUsd.getBids().containsKey(1144.04D));
         assertEquals(LocalDateTime.ofEpochSecond(1656458265L, 227062, ZoneOffset.UTC), snapshotEthUsd.getLatestTimestamp());
 
         snapshotOperator.dumpAllSnapshots(System.out);

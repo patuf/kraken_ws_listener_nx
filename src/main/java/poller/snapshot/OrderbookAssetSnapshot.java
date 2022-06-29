@@ -14,16 +14,15 @@ import java.util.*;
  * thus two different elements at the same price, aren't supposed to exist.
  */
 public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
-    private static final String ZERO_STRING = "0.00000000";
 
-    private TreeMap<Double, TradeEvent> asks;
-    private TreeMap<Double, TradeEvent> bids;
-    private TradeEventComparator comparator = new TradeEventComparator();
-    private String asset;
+    private final TreeMap<Double, TradeEvent> asks;
+    private final TreeMap<Double, TradeEvent> bids;
+    private final String asset;
     private LocalDateTime latestTimestamp;
 
     public OrderbookAssetSnapshot(String asset) {
         this.asset = asset;
+        TradeEventComparator comparator = new TradeEventComparator();
         asks = new TreeMap<>(comparator);
         bids = new TreeMap<>(comparator);
     }
@@ -35,7 +34,7 @@ public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
 
     @Override
     public void putAsk(TradeEvent ask) {
-        if (ZERO_STRING.equals(ask.getAmount())) {
+        if (ask.getAmount() == 0) {
             asks.remove(ask.getPrice());
         } else {
             asks.put(ask.getPrice(), ask);
@@ -54,7 +53,7 @@ public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
 
     @Override
     public void putBid(TradeEvent bid) {
-        if (ZERO_STRING.equals(bid.getAmount())) {
+        if (bid.getAmount() == 0) {
             bids.remove(bid.getPrice());
         } else {
             bids.put(bid.getPrice(), bid);
