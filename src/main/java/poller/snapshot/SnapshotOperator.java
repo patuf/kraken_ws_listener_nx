@@ -72,7 +72,7 @@ public class SnapshotOperator {
     private void processOperations(JsonArray operations, Consumer<TradeEvent> consume) {
         for (JsonElement el: operations) {
             JsonArray operation = el.getAsJsonArray();
-            String price = operation.get(0).getAsString();
+            double price = operation.get(0).getAsDouble();
             String amount = operation.get(1).getAsString();
             String timestampSt = operation.get(2).getAsString();
             int delimIdx = timestampSt.indexOf('.');

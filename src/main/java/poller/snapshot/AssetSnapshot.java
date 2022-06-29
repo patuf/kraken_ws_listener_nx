@@ -14,9 +14,9 @@ import java.util.TreeSet;
  */
 public interface AssetSnapshot<V extends TradeEvent> {
 
-    SortedMap<String, V> getAsks();
+    SortedMap<Double, V> getAsks();
     void putAsk(V ask);
-    SortedMap<String, V> getBids();
+    SortedMap<Double, V> getBids();
     void putBid(V bid);
 
     String getAsset();

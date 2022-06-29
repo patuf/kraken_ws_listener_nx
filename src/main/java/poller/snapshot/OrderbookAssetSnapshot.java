@@ -16,8 +16,8 @@ import java.util.*;
 public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
     private static final String ZERO_STRING = "0.00000000";
 
-    private TreeMap<String, TradeEvent> asks;
-    private TreeMap<String, TradeEvent> bids;
+    private TreeMap<Double, TradeEvent> asks;
+    private TreeMap<Double, TradeEvent> bids;
     private TradeEventComparator comparator = new TradeEventComparator();
     private String asset;
     private LocalDateTime latestTimestamp;
@@ -29,7 +29,7 @@ public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
     }
 
     @Override
-    public SortedMap<String, TradeEvent> getAsks() {
+    public SortedMap<Double, TradeEvent> getAsks() {
         return asks;
     }
 
@@ -48,7 +48,7 @@ public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
     }
 
     @Override
-    public SortedMap<String, TradeEvent> getBids() {
+    public SortedMap<Double, TradeEvent> getBids() {
         return bids;
     }
 
@@ -122,10 +122,10 @@ public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
         return builder.toString();
     }
 
-    private static class TradeEventComparator implements Comparator<String> {
+    private static class TradeEventComparator implements Comparator<Double> {
 
         @Override
-        public int compare(String te1, String te2) {
+        public int compare(Double te1, Double te2) {
             return te2.compareTo(te1);
         }
     }

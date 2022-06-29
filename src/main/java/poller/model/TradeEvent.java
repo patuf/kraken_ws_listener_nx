@@ -8,17 +8,17 @@ import java.time.LocalDateTime;
  * Extending classes can augment with additional fields
  */
 public class TradeEvent {
-    private String price;
+    private double price;
     private String amount;
     private LocalDateTime ts;
 
-    public TradeEvent(String price, String amount, LocalDateTime ts) {
+    public TradeEvent(double price, String amount, LocalDateTime ts) {
         this.price = price;
         this.amount = amount;
         this.ts = ts;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
