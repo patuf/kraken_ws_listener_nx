@@ -15,6 +15,7 @@ import java.util.*;
  */
 public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
 
+    private final static String LINE_SEP = System.lineSeparator();
     private final TreeMap<Double, TradeEvent> asks;
     private final TreeMap<Double, TradeEvent> bids;
     private final String asset;
@@ -93,30 +94,35 @@ public class OrderbookAssetSnapshot implements AssetSnapshot<TradeEvent> {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("<------------------------------------>\nasks:\n");
-        asks.forEach((key, event) -> builder.append('\t').append(event.toString()).append("\n"));
+        StringBuilder builder = new StringBuilder("<------------------------------------>")
+                .append(LINE_SEP)
+                .append("asks:")
+                .append(LINE_SEP);
+        asks.forEach((key, event) -> builder.append('\t').append(event.toString()).append(LINE_SEP));
         builder.append("best ask: ");
         if (asks.isEmpty()) {
-            builder.append("none\n");
+            builder.append("none").append(LINE_SEP);
         } else {
-            builder.append(getBestAsk().toString()).append("\n");
+            builder.append(getBestAsk().toString()).append(LINE_SEP);
         }
         builder.append("best bid: ");
         if (bids.isEmpty()) {
-            builder.append("none\n");
+            builder.append("none").append(LINE_SEP);
         } else {
-            builder.append(getBestBid().toString()).append("\n");
+            builder.append(getBestBid().toString()).append(LINE_SEP);
         }
 
-        builder.append("bids:\n");
-        bids.forEach((key, event) -> builder.append('\t').append(event.toString()).append("\n"));
+        builder.append("bids:").append(LINE_SEP);
+        bids.forEach((key, event) -> builder.append('\t').append(event.toString()).append(LINE_SEP));
 
         if (!bids.isEmpty() || !asks.isEmpty()) {
-            builder.append(getLatestTimestamp()).append("\n");
+            builder.append(getLatestTimestamp()).append(LINE_SEP);
         }
 
-        builder.append(getAsset()).append("\n")
-                .append(">-------------------------------------<\n");
+        builder.append(getAsset())
+                .append(LINE_SEP)
+                .append(">-------------------------------------<")
+                .append(LINE_SEP);
 
         return builder.toString();
     }

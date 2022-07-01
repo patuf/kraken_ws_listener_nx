@@ -19,7 +19,6 @@ public class PollingApp {
     protected static final Log logger = LogFactory.getLog(PollingApp.class);
 
     public static void main(String[] args) {
-        logger.info("attempting things");
         WebSocketClient client = new StandardWebSocketClient();
         SubscribeMessage subMsg = new SubscribeMessage(new String[]{
                 "ETH/USD",
@@ -30,6 +29,7 @@ public class PollingApp {
         snapshotOperator.registerAssetSnapshot(SnapshotOperator.Channel.BOOK, new OrderbookAssetSnapshot("XBT/USD"));
         WebSocketHandler wsHandler = new SnapshotKeepingWebSocketHandler(subMsg, snapshotOperator);
 
+        logger.info("Attempting to open a Kraken session");
         ListenableFuture<WebSocketSession> handshake = client.doHandshake(wsHandler, null, URI.create("wss://ws.kraken.com"));
         new Scanner(System.in).nextLine(); // Awaiting for enter to stop the execution
 

@@ -55,19 +55,19 @@ public class TestMapping {
 
     @Test
     @Order(3)
-    public void testOverwriteBid() {
+    public void testUpdateBid() {
         String testJsonStr = "[560,{\"b\":[[\"1144.03000\",\"37.67105113\",\"1656458264.629331\"]],\"c\":\"89931786\"},\"book-10\",\"ETH/USD\"]";
         snapshotOperator.processTradeMessage(testJsonStr);
 
         assertEquals(37.67105113D, snapshotEthUsd.getBids().get(1144.03).getAmount());
         assertEquals(LocalDateTime.ofEpochSecond(1656458264L, 629331, ZoneOffset.UTC), snapshotEthUsd.getLatestTimestamp());
 
-        snapshotOperator.dumpAllSnapshots(System.out); // Just for info
+//        snapshotOperator.dumpAllSnapshots(System.out); // Just for info
     }
 
     @Test
     @Order(4)
-    public void testInsertBid() {
+    public void testCreateBid() {
         assertEquals(1143.45, snapshotEthUsd.getBids().lastKey());
         String testJsonStr = "[560,{\"b\":[[\"1144.04000\",\"30.58454972\",\"1656458265.133296\"]],\"c\":\"3291298277\"},\"book-10\",\"ETH/USD\"]";
         snapshotOperator.processTradeMessage(testJsonStr);
@@ -78,43 +78,65 @@ public class TestMapping {
 
     @Test
     @Order(5)
-    public void testRemoveBid() {
+    public void testDeleteBid() {
         String testJsonStr = "[560,{\"b\":[[\"1144.04000\",\"0.00000000\",\"1656458265.227062\"],[\"1143.62000\",\"1.22554901\",\"1656458264.674373\",\"r\"]],\"c\":\"1267745156\"},\"book-10\",\"ETH/USD\"]";
 
         snapshotOperator.processTradeMessage(testJsonStr);
 
         assertFalse(snapshotEthUsd.getBids().containsKey(1144.04D));
+        assertEquals(1.22554901D, snapshotEthUsd.getBids().get(1143.62D).getAmount());
         assertEquals(LocalDateTime.ofEpochSecond(1656458265L, 227062, ZoneOffset.UTC), snapshotEthUsd.getLatestTimestamp());
 
-        snapshotOperator.dumpAllSnapshots(System.out);
+//        snapshotOperator.dumpAllSnapshots(System.out);
     }
 
     @Test
     @Order(6)
+    /**
+     * An unlikely scenario in the real world, but let's test it just in case
+     */
     public void testEnterExit() {
-
         String testJsonStr = "[560,{\"b\":[[\"999.04000\",\"1.23000000\",\"1656458265.227062\"]],\"c\":\"1267745156\"},\"book-10\",\"ETH/USD\"]";
         snapshotOperator.processTradeMessage(testJsonStr);
 
         assertEquals(1143.61, snapshotEthUsd.getBids().lastKey());
         assertFalse(snapshotEthUsd.getBids().containsKey(999.04));
         assertEquals(LocalDateTime.ofEpochSecond(1656458265L, 227062, ZoneOffset.UTC), snapshotEthUsd.getLatestTimestamp());
-
-    }
-
-    @Test
-    @Order(6)
-    public void testOverwriteAsk() {
-
     }
 
     @Test
     @Order(7)
-    public void testInsertAsk() {
+    public void testUpdateAsk() {
+        assertTrue(snapshotBtcUsd.getAsks().containsKey(20281.5D));
+        assertNotEquals(0.26505876D, snapshotBtcUsd.getAsks().get(20281.5D).getAmount());
+
+        String testJsonStr = "[336,{\"a\":[[\"20281.50000\",\"0.26505876\",\"1656458265.236761\"]],\"c\":\"2317773838\"},\"book-10\",\"XBT/USD\"]";
+        snapshotOperator.processTradeMessage(testJsonStr);
+        assertEquals(0.26505876D, snapshotBtcUsd.getAsks().get(20281.5D).getAmount());
+        assertEquals(LocalDateTime.ofEpochSecond(1656458265L, 236761, ZoneOffset.UTC), snapshotBtcUsd.getLatestTimestamp());
     }
 
     @Test
-    @Order(7)
-    public void testRemoveAsk() {
+    @Order(8)
+    public void testCreateAsk() {
+        assertTrue(snapshotBtcUsd.getAsks().containsKey(20282.1D));
+        assertFalse(snapshotBtcUsd.getAsks().containsKey(20287.3D));
+        String testJsonStr = "[336,{\"a\":[[\"20282.10000\",\"0.00000000\",\"1656458265.240169\"],[\"20287.30000\",\"0.15733892\",\"1656458257.354017\",\"r\"]],\"c\":\"451844366\"},\"book-10\",\"XBT/USD\"]";
+        snapshotOperator.processTradeMessage(testJsonStr);
+        assertFalse(snapshotBtcUsd.getAsks().containsKey(20282.1D));
+        assertEquals(0.15733892D, snapshotBtcUsd.getAsks().get(20287.3D).getAmount());
+        assertEquals(LocalDateTime.ofEpochSecond(1656458265L, 240169, ZoneOffset.UTC), snapshotBtcUsd.getLatestTimestamp());
+    }
+
+    @Test
+    @Order(9)
+    public void testDeleteAsk() {
+        assertTrue(snapshotBtcUsd.getAsks().containsKey(20280.1D));
+        String testJsonStr = "[336,{\"a\":[[\"20280.10000\",\"0.00000000\",\"1656458265.256818\"],[\"20285.50000\",\"0.56308000\",\"1656458250.356237\",\"r\"]],\"c\":\"2434637797\"},\"book-10\",\"XBT/USD\"]";
+        snapshotOperator.processTradeMessage(testJsonStr);
+
+        assertFalse(snapshotBtcUsd.getAsks().containsKey(20280.1D));
+        assertEquals(0.56308D, snapshotBtcUsd.getAsks().get(20285.5D).getAmount());
+        assertEquals(LocalDateTime.ofEpochSecond(1656458265L, 256818, ZoneOffset.UTC), snapshotBtcUsd.getLatestTimestamp());
     }
 }

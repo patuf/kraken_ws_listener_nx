@@ -7,6 +7,11 @@ import org.springframework.web.socket.*;
 import poller.model.SubscribeMessage;
 import poller.snapshot.SnapshotOperator;
 
+/**
+ * WebSocket handler that handles the meta-communication, i.e. heartbeats and subscription responses.
+ * It passes through to the snapshotOperator the rest of the messages, i.e. trade notification messages.
+ * No connection failed handling is implemented.
+ */
 public class SnapshotKeepingWebSocketHandler implements WebSocketHandler {
     protected static final Log logger = LogFactory.getLog(PollingApp.class);
     private SubscribeMessage subscribeMessage;
@@ -26,8 +31,7 @@ public class SnapshotKeepingWebSocketHandler implements WebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-//        logger.info(message.getPayload()); // The logger is in a separate thread, so it can't be trusted for the order of messages on screen
-        System.out.println(message.getPayload());
+//        System.out.println(message.getPayload()); // The logger is in a separate thread, so it can't be trusted for the order of messages on screen.
         String messagePayload = message.getPayload().toString();
         if (messagePayload.startsWith("{\"event\":\"heartbeat\"}") ||
                 messagePayload.startsWith("{\"channelID\":") ||

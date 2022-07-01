@@ -10,7 +10,7 @@ import java.util.TreeSet;
 
 /**
  * An implementation of this class would represent an in-memory snapshot of a particular channel.
- * @param <T> The very basic TradeEvent, or its descendant, if necessary.
+ * @param <V> The very basic TradeEvent, or its descendant, if necessary.
  */
 public interface AssetSnapshot<V extends TradeEvent> {
 
